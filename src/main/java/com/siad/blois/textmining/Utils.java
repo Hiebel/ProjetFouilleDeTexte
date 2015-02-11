@@ -62,12 +62,14 @@ public class Utils
 
 	public static Map<String, Integer> getTokens(List<String> list, String fileName)
 	{
+		System.out.println("GETTOKENS");
 		Map<String, Integer> tokenMap = new HashMap<String, Integer>();
 
 		File file = new File(getRessourcesUrl() + fileName);
 
 		if (file.exists())
 		{
+			System.out.println("	Recup...");
 			BufferedReader input = null;
 
 			try
@@ -92,6 +94,7 @@ public class Utils
 			}
 		} else
 		{
+			System.out.println("	Create...");
 			List<String> tokens = new ArrayList<String>();
 
 			for (String entry : list)
@@ -137,7 +140,7 @@ public class Utils
 	@SuppressWarnings("unchecked")
 	public static List<Word> treeTagger(final Map<String, Integer> map)
 	{
-		System.out.println("-------------TreeTagger-----------");
+		System.out.println("TREETAGGER");
 
 		final List<Word> listWord = new ArrayList<Word>();
 
@@ -189,6 +192,7 @@ public class Utils
 
 	public static List<Word> setCategory(List<Word> words, char c)
 	{
+		System.out.println("SETCATEGORY");
 		for (Word word : words)
 		{
 			word.category = c;
@@ -199,6 +203,7 @@ public class Utils
 
 	public static List<Word> merge(List<Word> positifWords, List<Word> negatifWords)
 	{
+		System.out.println("MERGE");
 		List<Word> list = new ArrayList<Word>();
 		
 		list.addAll(positifWords);
