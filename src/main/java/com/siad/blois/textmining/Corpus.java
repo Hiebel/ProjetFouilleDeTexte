@@ -51,7 +51,7 @@ public class Corpus
 
 	private void loadIn(List<String> list, String path) throws IOException
 	{
-		File folder = new File(this.getRessourcesUrl() + "sources/data/pos/");
+		File folder = new File(Utils.getRessourcesUrl() + path);
 
 		File[] listOfFiles = folder.listFiles();
 
@@ -59,13 +59,6 @@ public class Corpus
 		{
 			list.add(new String(Files.readAllBytes(file.toPath())));
 		}
-	}
-
-	private String getRessourcesUrl()
-	{
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		return classLoader.getResource("").getPath();
 	}
 
 	public List<String> getPositif()

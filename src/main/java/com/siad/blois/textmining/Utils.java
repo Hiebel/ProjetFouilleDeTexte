@@ -1,6 +1,11 @@
 package com.siad.blois.textmining;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,32 +61,86 @@ public class Utils
 		return luceneList;
 	}
 
-	public static Map<String, Integer> getTokens(List<String> list)
+	public static Map<String, Integer> getTokens(List<String> list, String fileName)
 	{
-		List<String> tokens = new ArrayList<String>();
-
-		for (String entry : list)
-		{
-			tokens.addAll(Utils.tokenize(entry));
-		}
-
-		Set<String> uniqueToken = new HashSet<String>(tokens);
 		Map<String, Integer> tokenMap = new HashMap<String, Integer>();
 
-		for (String token : uniqueToken)
-		{
-			tokenMap.put(token,  Collections.frequency(tokens, token));
-		}
+		File file = new File(getRessourcesUrl() + fileName);
 
+		if (file.exists())
+		{
+			BufferedReader input = null;
+
+			try
+			{
+				input = new BufferedReader(new FileReader(file));
+				
+				String token = input.readLine();
+				
+				while (token != null)
+				{
+					String[] tokenParts = token.split(" ");
+
+					tokenMap.put(tokenParts[0], Integer.valueOf(tokenParts[1]));
+					
+					token = input.readLine();
+				}
+
+				input.close();
+			} catch (Exception e)
+			{
+				System.out.println("Problème lors de la récupération du fichier : " + fileName);
+			}
+		} else
+		{
+			List<String> tokens = new ArrayList<String>();
+
+			for (String entry : list)
+			{
+				tokens.addAll(Utils.tokenize(entry));
+			}
+
+			Set<String> uniqueToken = new HashSet<String>(tokens);
+
+			tokenMap = new HashMap<String, Integer>();
+
+			BufferedWriter output = null;
+
+			try
+			{
+				output = new BufferedWriter(new FileWriter(file));
+
+				for (String token : uniqueToken)
+				{
+					int freq = Collections.frequency(tokens, token);
+
+					tokenMap.put(token, freq);
+
+					output.write(token + " " + freq + "\n");
+				}
+				
+				output.close();
+			} catch (Exception e)
+			{
+				System.out.println("Problème lors de la création du fichier : " + fileName);
+			}
+		}
 		return tokenMap;
 	}
 
+	public static String getRessourcesUrl()
+	{
+		ClassLoader classLoader = Utils.class.getClassLoader();
+
+		return classLoader.getResource("").getPath();
+	}
+
 	@SuppressWarnings("unchecked")
-	public static List<Word> treeTagger(final HashMap<String, Integer> map)
+	public static List<Word> treeTagger(final Map<String, Integer> map)
 	{	
 		System.out.println("-------------TreeTagger-----------");
 		
-		final ArrayList<Word> listWord = new ArrayList<Word>();
+		final List<Word> listWord = new ArrayList<Word>();
 		
 		List<String> list = new ArrayList<String>();
 		//HasMap to List
@@ -92,15 +151,15 @@ public class Utils
 			// Point TT4J to the TreeTagger installation directory. The executable is expected
 			// in the "bin" subdirectory - in this example at "/opt/treetagger/bin/tree-tagger"
 			
-			ClassLoader classLoader = Utils.class.getClassLoader();
 
-			System.setProperty("treetagger.home", classLoader.getResource("").getPath().substring(1)+"TreeTagger");
+
+			System.setProperty("treetagger.home", getRessourcesUrl()+"TreeTagger");
 			
 			TreeTaggerWrapper<String> tt = new TreeTaggerWrapper<String>();
 
 			try 
 			{
-				tt.setModel(classLoader.getResource("").getPath().substring(1)+"TreeTagger/lib/english-utf8.par:iso8859-1");
+				tt.setModel(getRessourcesUrl()+"TreeTagger/lib/english-utf8.par:iso8859-1");
 
 				tt.setHandler(new TokenHandler<String>() 
 						{
@@ -117,7 +176,11 @@ public class Utils
 		}catch(Exception e){
 
 		}
-
+		for (Word string : listWord) {
+			
+		
+			System.out.println(string.token+" : "+string.classification+" : "+string.frequency);
+		}
 		return listWord;
 	}
 }
