@@ -2,8 +2,12 @@ package com.siad.blois.textmining;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -23,33 +27,33 @@ public class Utils
 	{
 		TokenStream stream = null;
 
-		List<String> luceneList = new ArrayList<String>();		
+		List<String> luceneList = new ArrayList<String>();
 
 		try
 		{
 			stream = analyzer.tokenStream("", new StringReader(entry));
-			
+
 			stream.reset();
 
 			while (stream.incrementToken())
 			{
 				luceneList.add(stream.getAttribute(CharTermAttribute.class).toString());
 			}
-			
+
 			if (stream != null)
 			{
 				stream.close();
 			}
-			
+
 		} catch (Exception e)
 		{
 			System.out.println("Problem in Utils.tokenize:\n" + e.getMessage());
 		}
-		
+
 		return luceneList;
 	}
-	
-	public static List<String> getTokens(List<String> list)
+
+	public static Map<String, Integer> getTokens(List<String> list)
 	{
 		List<String> tokens = new ArrayList<String>();
 
@@ -58,11 +62,14 @@ public class Utils
 			tokens.addAll(Utils.tokenize(entry));
 		}
 
-		HashSet<String> hashSet = new HashSet<String>();
-		hashSet.addAll(tokens);
-		tokens.clear();
-		tokens.addAll(hashSet);
+		Set<String> uniqueToken = new HashSet<String>(tokens);
+		Map<String, Integer> tokenMap = new HashMap<String, Integer>();
+		
+		for (String token : uniqueToken)
+		{
+			tokenMap.put(token,  Collections.frequency(tokens, token));
+		}
 
-		return tokens;
+		return tokenMap;
 	}
 }
