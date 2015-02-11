@@ -17,6 +17,8 @@ public class Main
 
 		Map<String, Integer> positifTokens = Utils.getTokens(corpus.getPositif(), "positif_token.txt");
 		
+		positifTokens = Utils.selectNumberOfFrequency(positifTokens);
+		
 		List<Word> positifWords = Utils.treeTagger(positifTokens);
 		
 		positifWords = Utils.setCategory(positifWords, '+');
@@ -25,6 +27,8 @@ public class Main
 		
 		Map<String, Integer> negatifTokens = Utils.getTokens(corpus.getNegatif(), "negatif_token.txt");
 
+		negatifTokens = Utils.selectNumberOfFrequency(negatifTokens);
+		
 		List<Word> negatifWords = Utils.treeTagger(negatifTokens);
 
 		negatifWords = Utils.setCategory(negatifWords, '-');
