@@ -1,5 +1,6 @@
 package com.siad.blois.textmining;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,8 +15,14 @@ public class Main
 
 		Map<String, Integer> positifTokens = Utils.getTokens(corpus.getPositif(), "positif_token.txt");
 		
-		Map<String, Integer> negatifTokens = Utils.getTokens(corpus.getNegatif(), "negatif_token.txt");
+		List<Word> positifWords = Utils.treeTagger(positifTokens);
 		
-		Utils.treeTagger(positifTokens);
+		positifWords = Utils.setCategory(positifWords, '+');
+		
+		Map<String, Integer> negatifTokens = Utils.getTokens(corpus.getNegatif(), "negatif_token.txt");
+
+		List<Word> negatifWords = Utils.treeTagger(negatifTokens);
+
+		negatifWords = Utils.setCategory(negatifWords, '-');
 	}
 }

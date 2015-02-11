@@ -1,7 +1,6 @@
 package com.siad.blois.textmining;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -74,15 +73,15 @@ public class Utils
 			try
 			{
 				input = new BufferedReader(new FileReader(file));
-				
+
 				String token = input.readLine();
-				
+
 				while (token != null)
 				{
 					String[] tokenParts = token.split(" ");
 
 					tokenMap.put(tokenParts[0], Integer.valueOf(tokenParts[1]));
-					
+
 					token = input.readLine();
 				}
 
@@ -118,7 +117,7 @@ public class Utils
 
 					output.write(token + " " + freq + "\n");
 				}
-				
+
 				output.close();
 			} catch (Exception e)
 			{
@@ -137,50 +136,64 @@ public class Utils
 
 	@SuppressWarnings("unchecked")
 	public static List<Word> treeTagger(final Map<String, Integer> map)
-	{	
+	{
 		System.out.println("-------------TreeTagger-----------");
-		
+
 		final List<Word> listWord = new ArrayList<Word>();
-		
+
 		List<String> list = new ArrayList<String>();
-		//HasMap to List
-		for(String token : map.keySet())
+		// HasMap to List
+		for (String token : map.keySet())
 			list.add(token);
-		
-		try{
-			// Point TT4J to the TreeTagger installation directory. The executable is expected
-			// in the "bin" subdirectory - in this example at "/opt/treetagger/bin/tree-tagger"
-			
 
+		try
+		{
+			// Point TT4J to the TreeTagger installation directory. The
+			// executable is expected
+			// in the "bin" subdirectory - in this example at
+			// "/opt/treetagger/bin/tree-tagger"
 
-			System.setProperty("treetagger.home", getRessourcesUrl()+"TreeTagger");
-			
+			System.setProperty("treetagger.home", getRessourcesUrl() + "TreeTagger");
+
 			TreeTaggerWrapper<String> tt = new TreeTaggerWrapper<String>();
 
-			try 
+			try
 			{
-				tt.setModel(getRessourcesUrl()+"TreeTagger/lib/english-utf8.par:iso8859-1");
+				tt.setModel(getRessourcesUrl() + "TreeTagger/lib/english-utf8.par:iso8859-1");
 
-				tt.setHandler(new TokenHandler<String>() 
-						{
-					public void token(String token, String pos, String lemma) {
-						//System.out.println(token + "\t" + pos + "\t" + lemma);
+				tt.setHandler(new TokenHandler<String>()
+				{
+					public void token(String token, String pos, String lemma)
+					{
+						// System.out.println(token + "\t" + pos + "\t" +
+						// lemma);
 						listWord.add(new Word(token, map.get(token), pos));
 					}
-						});
+				});
 				tt.process(list);
-			}
-			finally {
+			} finally
+			{
 				tt.destroy();
 			}
-		}catch(Exception e){
+		} catch (Exception e)
+		{
 
 		}
-		for (Word string : listWord) {
-			
-		
-			System.out.println(string.token+" : "+string.classification+" : "+string.frequency);
+		for (Word string : listWord)
+		{
+
+			System.out.println(string.token + " : " + string.classification + " : " + string.frequency);
 		}
 		return listWord;
+	}
+
+	public static List<Word> setCategory(List<Word> words, char c)
+	{
+		for (Word word : words)
+		{
+			word.category = c;
+		}
+
+		return words;
 	}
 }

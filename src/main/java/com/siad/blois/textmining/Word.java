@@ -7,7 +7,7 @@ public class Word {
 	//classification grammaticale
 	public String classification;
 	//pos ou neg
-	public String category;
+	public char category;
 	public Word(String token, int frequency, String classification) {
 		super();
 		this.token = token;
