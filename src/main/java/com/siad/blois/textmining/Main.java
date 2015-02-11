@@ -29,6 +29,8 @@ public class Main
 		
 		negatifTokens = Utils.selectNumberOfFrequency(negatifTokens);
 
+		negatifTokens = Utils.selectNumberOfFrequency(negatifTokens);
+		
 		List<Word> negatifWords = Utils.treeTagger(negatifTokens);
 
 		negatifWords = Utils.setCategory(negatifWords, '-');
