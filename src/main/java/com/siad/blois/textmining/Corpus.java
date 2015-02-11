@@ -2,11 +2,9 @@ package com.siad.blois.textmining;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.io.IOUtils;
 
 public class Corpus
 {
@@ -21,6 +19,8 @@ public class Corpus
 				instance = new Corpus();
 			} catch (IOException e)
 			{
+				System.out.println(e.getMessage());
+
 				instance = null;
 			}
 		}
@@ -35,22 +35,37 @@ public class Corpus
 	private Corpus() throws IOException
 	{
 		positif = new ArrayList<String>();
-		
+
 		negatif = new ArrayList<String>();
-		
-		//TODO récupérer tous les fichiers
-		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("sources" + File.separator + "data" + File.separator + "pos" + File.separator + "p_cv100_11528.txt");
-		
+
 		try
 		{
-			positif.add(new String(IOUtils.toString(inputStream).getBytes()));
-		} finally
+			this.loadIn(this.positif, "sources/data/pos/");
+			this.loadIn(this.negatif, "sources/data/neg/");
+		} catch (Exception e)
 		{
-			if(inputStream != null)
-			{
-				inputStream.close();
-			}
+			System.out.println("Problem in Corpus.create:\n" + e.getMessage());
 		}
+
+	}
+
+	private void loadIn(List<String> list, String path) throws IOException
+	{
+		File folder = new File(this.getRessourcesUrl() + "sources/data/pos/");
+
+		File[] listOfFiles = folder.listFiles();
+
+		for (File file : listOfFiles)
+		{
+			list.add(new String(Files.readAllBytes(file.toPath())));
+		}
+	}
+
+	private String getRessourcesUrl()
+	{
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		return classLoader.getResource("").getPath();
 	}
 
 	public List<String> getPositif()
