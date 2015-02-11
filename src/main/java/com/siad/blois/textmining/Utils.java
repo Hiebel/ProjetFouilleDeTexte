@@ -182,11 +182,10 @@ public class Utils
 		{
 
 		}
-		for (Word string : listWord)
-		{
-
-			System.out.println(string.token + " : " + string.classification + " : " + string.frequency);
-		}
+//		for (Word string : listWord)
+//		{
+//			System.out.println(string.token + " : " + string.classification + " : " + string.frequency);
+//		}
 		return listWord;
 	}
 
