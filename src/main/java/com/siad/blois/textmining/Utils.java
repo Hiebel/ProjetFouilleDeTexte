@@ -196,4 +196,14 @@ public class Utils
 
 		return words;
 	}
+
+	public static List<Word> merge(List<Word> positifWords, List<Word> negatifWords)
+	{
+		List<Word> list = new ArrayList<Word>();
+		
+		list.addAll(positifWords);
+		list.addAll(negatifWords);
+		
+		return list;
+	}
 }

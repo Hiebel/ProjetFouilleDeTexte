@@ -24,5 +24,7 @@ public class Main
 		List<Word> negatifWords = Utils.treeTagger(negatifTokens);
 
 		negatifWords = Utils.setCategory(negatifWords, '-');
+		
+		List<Word> words = Utils.merge(positifWords, negatifWords);
 	}
 }
