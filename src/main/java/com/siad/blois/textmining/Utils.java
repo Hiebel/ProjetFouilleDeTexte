@@ -190,6 +190,25 @@ public class Utils
 		return listWord;
 	}
 
+	public static Map<String, Integer> selectNumberOfFrequency(Map<String, Integer> map)
+	{
+		System.out.println("SELECTNUMBEROFFREQUENCY");
+		final int number = 25;
+		List<String> deleteList = new ArrayList<String>();
+		for (String token : map.keySet())
+		{
+			if (map.get(token) < number)
+			{
+				deleteList.add(token);
+			}
+		}
+		for (String tokenToDelete : deleteList)
+		{
+			map.remove(tokenToDelete);
+		}
+		return map;
+	}
+
 	public static List<Word> setCategory(List<Word> words, char c)
 	{
 		System.out.println("SETCATEGORY");
@@ -205,10 +224,10 @@ public class Utils
 	{
 		System.out.println("MERGE");
 		List<Word> list = new ArrayList<Word>();
-		
+
 		list.addAll(positifWords);
 		list.addAll(negatifWords);
-		
+
 		return list;
 	}
 }
